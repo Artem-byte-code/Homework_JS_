@@ -27,10 +27,10 @@ const products = [
     },
 ];
 
-function forEach(){
-}
-
-
+products.forEach(product => {
+    product.price = product.price*(1-15/100)
+    console.log(product.price)
+});
 
     </script>
 </body>
