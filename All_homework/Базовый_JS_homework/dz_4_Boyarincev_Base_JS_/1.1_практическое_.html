@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+// 1.1 (это обязательное задание) Сделайте в стиле es5, а затем в стиле es6 
+// (по аналогии из дополнительных видео -> 3 примеры наследования -> типы на es5 и es6),
+// конструктор Product, который принимает параметры name и price, сохраните их как
+// свойства объекта. Также объекты типа Product должны иметь метод make25PercentDiscount,
+// который будет уменьшать цену в объекте на 25%. Имейте в виду, что метод make25PercentDiscount
+// не должен быть внутри функции-конструктора, и также не нужно создавать отдельный объект-прототип
+
+
+// es5 
+function Product (name, price) // функция конструктор
+{
+this.name = name // имя продукта
+this.price = price // цена продукта
+}
+
+Product.prototype.make25PercentDiscount = function(){  // метод функция для продукта
+this.price = this.price * 0.75;  // формула скидки 25%
+}
+
+const product1 = new Product("клавиатура", 5000) // создаём продукт 
+console.log(product1.price) // цена до скидки
+
+product1.make25PercentDiscount() //применяем скидку
+console.log(product1.price) // цена после скидки
+
+
+// es6
+class Product {  // класс
+  constructor(name, price) {   // функция конструктор для класса
+    this.name = name; // имя продукта
+    this.price = price; // цена продукта
+  }
+
+  // Метод добавляется в прототип не внутри конструктора
+  make25PercentDiscount() {
+    this.price *= 0.75; // Уменьшаем цену на 25%
+  }
+}
+
+// Проверка:
+const product2 = new Product("Ноутбук", 10000);
+console.log(product2.price); // 10000 (до скидки)
+
+product1.make25PercentDiscount();
+console.log(product2.price); // 7500 (после скидки)
+
+
+    </script>
+</body>
+</html>

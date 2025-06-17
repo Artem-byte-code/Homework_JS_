@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+// 1. (это задание делайте по желанию) 
+// Написать функцию, преобразующую число в объект. 
+// Передавая на вход число в диапазоне [0, 999],
+// мы должны получить на выходе объект, в котором в соответствующих свойствах описаны разряды числа:
+//  - единицы (в свойстве units)
+//  - десятки (в свойстве tens)
+//  - сотни (в свойстве hundereds)
+// Например, для числа 45 мы должны получить следующий объект:
+// {
+//   units: 5, //это единицы
+//   tens: 4,  //это десятки
+//   hundreds: 0, //это сотни
+// }
+
+
+function numberToObject(number) {
+    // 1. Проверка, что аргумент является числом
+    if (typeof number !== 'number' || isNaN(number)) {
+        console.log("Ошибка: ожидается число");
+        return {};
+    }
+
+    // 2. Проверка, что число целое
+    if (!Number.isInteger(number)) {
+        console.log("Ошибка: число должно быть целым");
+        return {};
+    }
+
+    // 3. Проверка диапазона [0, 999]
+    if (number < 0 || number > 999) {
+        console.log("Ошибка: число должно быть от 0 до 999");
+        return {};
+    }
+
+    // 4. Вычисление разрядов
+    const hundreds = Math.floor(number / 100);      // Сотни
+    const tens = Math.floor((number % 100) / 10);   // Десятки
+    const units = number % 10;                      // Единицы
+
+    // 5. Возвращаем объект с разрядами
+    return {
+        units: units,
+        tens: tens,
+        hundreds: hundreds
+    };
+}
+
+  console.log(numberToObject(45));
+
+
+    </script>
+</body>
+</html>
