@@ -58,13 +58,13 @@ class Post {
     this.date = date;
   }
 
-  edit(newText) {
-    this.text = newText; // исправлено: было this.text = newText (но newText не объявлен)
+  edit(newText) { // Добавляем метод для текста
+    this.text = newText;
   }
 }
 
 class AttachedPost extends Post {
-  constructor(author, text, date) {
+  constructor(author, text, date) { // указываем какие параметры передаются (конкретно author, text, date)
     super(author, text, date); // вызываем конструктор Post
     this.highlighted = false; // добавляем новое свойство
   }

@@ -24,9 +24,10 @@ this.price = price // цена продукта
 }
 
 Product.prototype.make25PercentDiscount = function(){  // метод функция для продукта
-this.price = this.price * 0.75;  // формула скидки 25%
+this.price = this.price * 0.75;  // Уменьшаем цену на 25%
 }
 
+// Проверка:
 const product1 = new Product("клавиатура", 5000) // создаём продукт 
 console.log(product1.price) // цена до скидки
 
@@ -37,8 +38,8 @@ console.log(product1.price) // цена после скидки
 // es6
 class Product {  // класс
   constructor(name, price) {   // функция конструктор для класса
-    this.name = name; // имя продукта
-    this.price = price; // цена продукта
+    this.name = name; // имя текущего продукта
+    this.price = price; // цена текущего продукта
   }
 
   // Метод добавляется в прототип не внутри конструктора
@@ -51,7 +52,7 @@ class Product {  // класс
 const product2 = new Product("Ноутбук", 10000);
 console.log(product2.price); // 10000 (до скидки)
 
-product1.make25PercentDiscount();
+product2.make25PercentDiscount();
 console.log(product2.price); // 7500 (после скидки)
 
 
