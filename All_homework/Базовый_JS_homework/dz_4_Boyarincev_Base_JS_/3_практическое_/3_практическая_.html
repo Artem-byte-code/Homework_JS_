@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кто хочет стать миллионером?</title>
+</head>
+<body>
+    <script>
+        // Массив вопросов и ответов для игры
+        const questions = [
+            {
+                text: "Сколько градусов кипение воды?",  // Текст вопроса
+                answers: [  // Варианты ответов
+                    { text: "100 градусов", correct: true },  // Правильный ответ
+                    { text: "50 градусов", correct: false },
+                    { text: "101 градус", correct: false },
+                    { text: "80 градусов", correct: false }
+                ]
+            },
+            {
+                text: "Какая планета самая большая в Солнечной системе?",
+                answers: [
+                    { text: "Земля", correct: false },
+                    { text: "Юпитер", correct: true },
+                    { text: "Сатурн", correct: false },
+                    { text: "Марс", correct: false }
+                ]
+            },
+            {
+                text: "Какое самое глубокое озеро в мире?", 
+                answers: [  
+                    { text: "Байкал", correct: true },  
+                    { text: "Каспийское море", correct: false },
+                    { text: "Танганьика", correct: false },
+                    { text: "Виктория", correct: false }
+                ]
+            },
+                        {
+                text: "Какой химический элемент обозначается символом 'O'??",  
+                answers: [  
+                    { text: "Кислород", correct: true },  
+                    { text: "Осмий", correct: false },
+                    { text: "Олово", correct: false },
+                    { text: "Оргоний", correct: false }
+                ]
+            },
+                        {
+                text: "Кто из этих композиторов написал 'Лунную сонату'?",  
+                answers: [  
+                    { text: "Вольфганг Амадей Моцарт", correct: false },  
+                    { text: "Людвиг ван Бетховен", correct: true },
+                    { text: "Иоганн Себастьян Бах", correct: false },
+                    { text: "Фредерик Шопен", correct: false }
+                ]
+            }
+];
+
+        // Основная функция игры
+        function playGame() {
+            let score = 0;  // Счетчик правильных ответов
+            const letters = ['A', 'B', 'C', 'D'];  // Буквы для вариантов ответов
+            
+            // Приветственное сообщение
+            alert("Добро пожаловать в игру 'Кто хочет стать миллионером'!");
+            
+            // Цикл по всем вопросам
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];  // Текущий вопрос
+                let questionText = `Вопрос ${i+1}: ${question.text}\n\n`;  // Формируем текст вопроса
+                
+                // Добавляем варианты ответов с буквами
+                question.answers.forEach((answer, index) => {
+                    questionText += `${letters[index]}. ${answer.text}\n`;
+                });
+                
+                // Запрашиваем ответ у пользователя
+                const userAnswer = prompt(questionText + "\nВведите букву правильного ответа:");
+                
+                // Если пользователь нажал "Отмена"
+                if (userAnswer === null) {
+                    // Подтверждаем выход
+                    if (confirm("Вы точно хотите выйти из игры?")) {
+                        alert(`Игра прервана. Ваш счет: ${score}`);
+                        return false;  // Завершаем игру
+                    } else {
+                        i--;  // Возвращаемся к текущему вопросу
+                        continue;  // Продолжаем цикл
+                    }
+                }
+                
+                // Проверяем корректность ввода (A-D)
+                const answerIndex = letters.indexOf(userAnswer.toUpperCase());
+                if (answerIndex === -1) { 
+                    alert("Пожалуйста, введите букву варианта ответа!");
+                    i--;  // уменьшаем чтобы при след. итерации вопрос повторился
+                    continue;
+                }
+                
+                // Проверяем правильность ответа
+                if (question.answers[answerIndex].correct) {
+                    score++;  // Увеличиваем счет
+                    alert("Верно! Ваш счет: " + score);
+                } else {
+                    // Находим правильный ответ
+                    const correctLetter = letters[question.answers.findIndex(a => a.correct)];
+                    alert(`Неверно! Правильный ответ: ${correctLetter}`);
+                }
+            }
+            
+            // Итоговое сообщение
+            alert(`Игра завершена! Ваш итоговый счет: ${score} из ${questions.length}`);
+            
+            // Предложение сыграть снова
+            if (confirm("Хотите сыграть еще раз?")) {
+                return true;  // Начать заново
+            }
+            return false;  // Завершить игру
+        }
+
+        // Основной цикл игры
+        let playAgain = true;
+        while (playAgain) {
+            playAgain = playGame();  // Запускаем игру
+        }
+        
+        // Прощальное сообщение
+        alert("Спасибо за игру! До свидания!");
+    </script>
+</body>
+</html>
