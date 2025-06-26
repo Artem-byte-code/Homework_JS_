@@ -27,18 +27,21 @@
     -->
 
     <script>
+
+        const goToTopEl = document.querySelector("#goToTop"); // Сохраняем в переменную ссылку на элемент
         
-goToTopEl = document.querySelector("goToTop");
+        // Добавляем обработчик события scroll
+        window.addEventListener('scroll', function() {
+            //Проверяем величину прокрутки
+            if (window.pageYOffset > 500) {                //Показываем элемент
 
-window.addEventListener('scroll', function(){
-    if(window.pageYOffset > 500){
-        goToTopEl.style.display = 'block';
-    } else {
-        goToTop.style.display = 'none';
-    }
-});
+                goToTopEl.style.display = 'block';
+            } else {
 
-
+                goToTopEl.style.display = 'none'; //Скрываем элемент
+            }
+        });
+        
     </script>
 </body>
 </html>
