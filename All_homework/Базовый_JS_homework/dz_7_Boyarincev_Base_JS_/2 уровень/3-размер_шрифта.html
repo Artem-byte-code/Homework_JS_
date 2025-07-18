@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="range" min="20" max="100">
+    <div>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat, expedita.
+    </div>
+    
+    <!-- 
+    Задание. Нужно чтобы при смещении ползунка в div менялся размер шрифта.
+    1. Получите ссылку на input.
+    2. Получите ссылку на div.
+    3. Input'у поставьте прослушивание события 'input';
+        3.1 У функции-обработчика определите параметр event.
+        3.2 Значение input'а читайте из event.target.value.
+    -->
+    
+
+    <script>
+        
+        // получаем ссылки на элементы и записываем их в переменные
+        const rangeInput = document.querySelector('input[type="range"]');
+        const textDiv = document.querySelector('div');
+    
+        // вешаем обработчик события изменения input 
+        rangeInput.addEventListener('input', function(event) {
+            // 3. Получаем значение из ползунка
+            const fontSize = event.target.value;
+            
+            // изменение шрифта 
+            textDiv.style.fontSize = fontSize + 'px';
+        });
+
+    </script>
+</body>
+</html>
