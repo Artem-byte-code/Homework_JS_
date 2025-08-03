@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Фастфуд - Корзина и Гамбургеры</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Фастфуд - Корзина и Гамбургеры</h1>
+
+  <section id="hamburger-section">
+    <h2>Конструктор гамбургера</h2>
+    <div>
+      <label>Размер:</label>
+      <select id="hamburger-size">
+        <option value="small">Маленький (50 руб, 20 кал)</option>
+        <option value="large">Большой (100 руб, 40 кал)</option>
+      </select>
+    </div>
+    <div>
+      <label>Начинка:</label>
+      <select id="hamburger-stuffing">
+        <option value="cheese">Сыр (+10 руб, +20 кал)</option>
+        <option value="salad">Салат (+20 руб, +5 кал)</option>
+        <option value="potato">Картофель (+15 руб, +10 кал)</option>
+      </select>
+    </div>
+    <div>
+      <label>Добавки:</label>
+      <div>
+        <input type="checkbox" id="topping-spice" value="spice">
+        <label for="topping-spice">Приправа (+15 руб, 0 кал)</label>
+      </div>
+      <div>
+        <input type="checkbox" id="topping-mayo" value="mayo">
+        <label for="topping-mayo">Майонез (+20 руб, +5 кал)</label>
+      </div>
+    </div>
+    <button id="calculate-hamburger">Рассчитать</button>
+    <button id="add-to-cart">Добавить в корзину</button>
+    <div class="output" id="hamburger-output"></div>
+  </section>
+
+  <section id="cart-section">
+    <h2>Корзина</h2>
+    <div id="cart-items"></div>
+    <div class="output">
+      <div>Товаров: <span id="cart-count">0</span></div>
+      <div>Общее количество: <span id="cart-quantity">0</span></div>
+      <div>Общая сумма: <span id="cart-total">0</span> руб.</div>
+    </div>
+    <button id="clear-cart">Очистить корзину</button>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
