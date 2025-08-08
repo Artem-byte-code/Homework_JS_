@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Интернет-магазин с корзиной</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<link rel="stylesheet" ref="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="search">
+                <input 
+                    type="text" 
+                    v-model="searchLine" 
+                    @keyup.enter="filterGoods"
+                    placeholder="Поиск товаров"
+                >
+                <button @click="filterGoods">Искать</button>
+            </div>
+            <button class="cart-button" @click="toggleCart">
+                Корзина
+                <span class="cart-count" v-if="cartItems.length > 0">{{ cartItems.length }}</span>
+            </button>
+        </div>
+
+        <div class="goods-list">
+            <div class="goods-item" v-for="product in filteredProducts" :key="product.id">
+                <img :src="product.image" :alt="product.name" style="width:100%; height:150px; object-fit:cover;">
+                <h3>{{ product.name }}</h3>
+                <p>Цена: {{ product.price }} ₽</p>
+                <button @click="addToCart(product)">Добавить в корзину</button>
+            </div>
+            <div class="no-data" v-if="filteredProducts.length === 0">
+                Нет данных
+            </div>
+        </div>
+
+        <div class="cart" v-show="isVisibleCart">
+            <button class="close-cart" @click="toggleCart">×</button>
+            <h2>Корзина</h2>
+            <div v-if="cartItems.length > 0">
+                <div class="cart-item" v-for="item in cartItems" :key="item.id">
+                    <span>{{ item.name }} ({{ item.price }} ₽)</span>
+                    <button @click="removeFromCart(item)">×</button>
+                </div>
+                <div class="cart-total">
+                    Итого: {{ cartTotal }} ₽
+                </div>
+                <button @click="clearCart">Очистить корзину</button>
+            </div>
+            <div v-else>
+                Корзина пуста
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                products: [
+                    { id: 1, name: 'Ноутбук', price: 45000, image: 'https://via.placeholder.com/150?text=Laptop' },
+                    { id: 2, name: 'Смартфон', price: 25000, image: 'https://via.placeholder.com/150?text=Phone' },
+                    { id: 3, name: 'Наушники', price: 5000, image: 'https://via.placeholder.com/150?text=Headphones' },
+                    { id: 4, name: 'Планшет', price: 18000, image: 'https://via.placeholder.com/150?text=Tablet' }
+                ],
+                filteredProducts: [],
+                searchLine: '',
+                cartItems: [],
+                isVisibleCart: false
+            },
+            created() {
+                this.filteredProducts = [...this.products];
+            },
+            computed: {
+                cartTotal() {
+                    return this.cartItems.reduce((total, item) => total + item.price, 0);
+                }
+            },
+            methods: {
+                filterGoods() {
+                    if (!this.searchLine.trim()) {
+                        this.filteredProducts = [...this.products];
+                        return;
+                    }
+                    const searchQuery = this.searchLine.toLowerCase();
+                    this.filteredProducts = this.products.filter(product => 
+                        product.name.toLowerCase().includes(searchQuery));
+                },
+                toggleCart() {
+                    this.isVisibleCart = !this.isVisibleCart;
+                },
+                addToCart(product) {
+                    this.cartItems.push({...product});
+                },
+                removeFromCart(item) {
+                    const index = this.cartItems.findIndex(cartItem => cartItem.id === item.id);
+                    if (index !== -1) {
+                        this.cartItems.splice(index, 1);
+                    }
+                },
+                clearCart() {
+                    this.cartItems = [];
+                }
+            }
+        });
+    </script>
+</body>
+</html>
