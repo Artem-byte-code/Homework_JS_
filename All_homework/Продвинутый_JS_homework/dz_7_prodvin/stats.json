@@ -1,0 +1,12 @@
+[
+    {
+        "action": "added",
+        "productName": "Ноутбук",
+        "timestamp": "2023-05-20T12:30:45.000Z"
+    },
+    {
+        "action": "removed",
+        "productName": "Смартфон",
+        "timestamp": "2023-05-20T12:35:22.000Z"
+    }
+]

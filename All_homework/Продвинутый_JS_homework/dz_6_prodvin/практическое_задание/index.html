@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Интернет-магазин с компонентами</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <!-- Компонент поиска -->
+            <search-component 
+                :search-line.sync="searchLine" 
+                @search="filterGoods">
+            </search-component>
+            
+            <button class="cart-button" @click="toggleCart">
+                Корзина
+                <span class="cart-count" v-if="cartItems.length > 0">{{ cartItems.length }}</span>
+            </button>
+        </div>
+
+        <!-- Компонент сообщения об ошибке -->
+        <error-message 
+            v-if="showError" 
+            :message="errorMessage"
+            @close="showError = false">
+        </error-message>
+
+        <div class="goods-list">
+            <div class="goods-item" v-for="product in filteredProducts" :key="product.id">
+                <img :src="product.image" :alt="product.name" style="width:100%; height:150px; object-fit:cover;">
+                <h3>{{ product.name }}</h3>
+                <p>Цена: {{ product.price }} ₽</p>
+                <button @click="addToCart(product)">Добавить в корзину</button>
+            </div>
+            <div class="no-data" v-if="filteredProducts.length === 0">
+                Нет данных
+            </div>
+        </div>
+
+        <!-- Компонент корзины -->
+        <cart-component 
+            :visible="isVisibleCart" 
+            :items="cartItems"
+            :total="cartTotal"
+            @toggle="toggleCart"
+            @remove="removeFromCart"
+            @clear="clearCart">
+        </cart-component>
+    </div>
+
+    <!-- Компонент поиска -->
+    <script type="text/x-template" id="search-template">
+        <div class="search">
+            <input 
+                type="text" 
+                :value="searchLine" 
+                @input="$emit('update:searchLine', $event.target.value)"
+                @keyup.enter="$emit('search')"
+                placeholder="Поиск товаров"
+            >
+            <button @click="$emit('search')">Искать</button>
+        </div>
+    </script>
+
+    <!-- Компонент корзины -->
+    <script type="text/x-template" id="cart-template">
+        <div class="cart" v-show="visible">
+            <button class="close-cart" @click="$emit('toggle')">×</button>
+            <h2>Корзина</h2>
+            <div v-if="items.length > 0">
+                <div class="cart-item" v-for="item in items" :key="item.id">
+                    <span>{{ item.name }} ({{ item.price }} ₽)</span>
+                    <button @click="$emit('remove', item)">×</button>
+                </div>
+                <div class="cart-total">
+                    Итого: {{ total }} ₽
+                </div>
+                <button @click="$emit('clear')">Очистить корзину</button>
+            </div>
+            <div v-else>
+                Корзина пуста
+            </div>
+        </div>
+    </script>
+
+    <!-- Компонент сообщения об ошибке -->
+    <script type="text/x-template" id="error-template">
+        <div class="error-message">
+            {{ message }}
+            <button @click="$emit('close')" style="margin-left: 10px; background: none; border: none; color: white;">×</button>
+        </div>
+    </script>
+
+    <script>
+        // Компонент поиска
+        Vue.component('search-component', {
+            template: '#search-template',
+            props: ['searchLine']
+        });
+
+        // Компонент корзины
+        Vue.component('cart-component', {
+            template: '#cart-template',
+            props: {
+                visible: Boolean,
+                items: Array,
+                total: Number
+            }
+        });
+
+        // Компонент сообщения об ошибке
+        Vue.component('error-message', {
+            template: '#error-template',
+            props: ['message']
+        });
+
+        // Основное приложение
+        new Vue({
+            el: '#app',
+            data: {
+                products: [],
+                filteredProducts: [],
+                searchLine: '',
+                cartItems: [],
+                isVisibleCart: false,
+                showError: false,
+                errorMessage: ''
+            },
+            created() {
+                this.loadProducts();
+            },
+            computed: {
+                cartTotal() {
+                    return this.cartItems.reduce((total, item) => total + item.price, 0);
+                }
+            },
+            methods: {
+                async loadProducts() {
+                    try {
+                        // Эмуляция запроса к серверу
+                        const response = await this.mockApiRequest();
+                        this.products = response;
+                        this.filteredProducts = [...this.products];
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorMessage = 'Ошибка загрузки товаров: ' + error.message;
+                    }
+                },
+                mockApiRequest() {
+                    return new Promise((resolve, reject) => {
+                        // Эмуляция задержки и случайной ошибки
+                        setTimeout(() => {
+                            if (Math.random() > 0.2) { // 80% успешных запросов
+                                resolve([
+                                    { id: 1, name: 'Ноутбук', price: 45000, image: 'https://via.placeholder.com/150?text=Laptop' },
+                                    { id: 2, name: 'Смартфон', price: 25000, image: 'https://via.placeholder.com/150?text=Phone' },
+                                    { id: 3, name: 'Наушники', price: 5000, image: 'https://via.placeholder.com/150?text=Headphones' },
+                                    { id: 4, name: 'Планшет', price: 18000, image: 'https://via.placeholder.com/150?text=Tablet' }
+                                ]);
+                            } else {
+                                reject(new Error('Сервер не отвечает'));
+                            }
+                        }, 500);
+                    });
+                },
+                filterGoods() {
+                    if (!this.searchLine.trim()) {
+                        this.filteredProducts = [...this.products];
+                        return;
+                    }
+                    const searchQuery = this.searchLine.toLowerCase();
+                    this.filteredProducts = this.products.filter(product => 
+                        product.name.toLowerCase().includes(searchQuery));
+                },
+                toggleCart() {
+                    this.isVisibleCart = !this.isVisibleCart;
+                },
+                addToCart(product) {
+                    this.cartItems.push({...product});
+                },
+                removeFromCart(item) {
+                    const index = this.cartItems.findIndex(cartItem => cartItem.id === item.id);
+                    if (index !== -1) {
+                        this.cartItems.splice(index, 1);
+                    }
+                },
+                clearCart() {
+                    this.cartItems = [];
+                }
+            }
+        });
+    </script>
+</body>
+</html>

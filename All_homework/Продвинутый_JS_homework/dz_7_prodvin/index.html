@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интернет-магазин с stats.json</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="script.js"></script>
+ <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>Интернет-магазин</h1>
+            <button class="cart-button" @click="toggleCart">
+                Корзина
+                <span class="cart-count" v-if="cartItems.length > 0">{{ cartItems.length }}</span>
+            </button>
+        </div>
+
+        <div class="error-message" v-if="showError">
+            {{ errorMessage }}
+            <button @click="showError = false">×</button>
+        </div>
+
+        <div class="goods-list">
+            <div class="goods-item" v-for="product in filteredProducts" :key="product.id">
+                <img :src="product.image" :alt="product.name">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p><strong>Цена: {{ product.price }} ₽</strong></p>
+                <button @click="addToCart(product)" :disabled="isLoading">
+                    {{ isLoading ? 'Добавляем...' : 'В корзину' }}
+                </button>
+            </div>
+        </div>
+
+        <div class="cart" v-show="isCartVisible">
+            <button class="close-cart" @click="toggleCart">×</button>
+            <h2>Корзина</h2>
+            <div v-if="cartItems.length > 0">
+                <div class="cart-item" v-for="item in cartItems" :key="item.cartId">
+                    <div>
+                        <h4>{{ item.name }}</h4>
+                        <p>{{ item.price }} ₽</p>
+                    </div>
+                    <button @click="removeFromCart(item)">×</button>
+                </div>
+                <p><strong>Итого: {{ cartTotal }} ₽</strong></p>
+                <button @click="clearCart">Очистить корзину</button>
+                <button class="stats-button" @click="downloadStats">Скачать stats.json</button>
+            </div>
+            <div v-else>
+                Корзина пуста
+            </div>
+        </div>
+    </div>
+</body>
+</html>
